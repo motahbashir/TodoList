@@ -1,0 +1,92 @@
+
+import {  useContext,  } from "react";
+import { ShopContext } from "../component/context/shopContext";
+
+
+const product = (props) =>{ 
+    const{id,productName,productImage,price }=props.data;
+    const {cartItems, addToCart, removeFromCart}= useContext(ShopContext);
+    return(
+        <div className="col-3">
+            <img src={productImage}  alt ="product-image"className="w-100"/>
+           <h5>{productName}  </h5> 
+            <p>price:{price}$</p>
+            <button className="btn-btn-info btn-sm">+</button>
+            <span className="mx-1"> 
+                 {cartItems?.filter((row) => row.id === id)[0]?.count}</span>
+            <button className="btn-btn-info btn-sm">-</button>
+        </div>
+
+    );
+};
+export default product
+
+
+
+const removeFromCart=(itemId) =>{
+
+        setCartItems(cartItems.map((i)=>{
+            if(i.id ===itemId)
+                return{...i, count: i.count - 1}
+            else return i
+        }))
+
+
+
+
+
+
+
+
+------------------------------------------------
+
+
+
+
+import {createContext, useState} from "react";
+ export const ShopContext = createContext(null);
+
+ export const ShopContextProvider =(props)=>{
+    const[cartItems , setCartItems]=useState([])
+
+    const addTocart =(itemId)=>{
+        if( !cartItems.find((item)=> item.id===itemId))
+        setCartItems([...cartItems, {id:itemId, count :1}])
+    else
+    setCartItems(cartItems.map((item)=>{
+if(item.id===itemId)
+    return {...item, count: item.count +1}
+
+else return item
+}))
+
+
+
+ console.log(cartItems)
+    }
+
+    const removeFromCart =(itemId) =>{
+        setCartItems(cartItems.map ((i)=>{
+            if(i.id ===itemId)
+            return {...i , count : i.count ===0 ? 0: i.count - 1}
+            else return i
+        }))
+
+    }
+
+   
+    const contextValue ={cartItems,addTocart
+        ,removeFromCart  }
+
+         return <ShopContext.Provider value={contextValue}>
+            {props.children}
+         </ShopContext.Provider>
+ }
+
+
+
+
+
+ 
+
+
